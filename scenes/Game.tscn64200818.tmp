@@ -1,0 +1,87 @@
+[gd_scene load_steps=4 format=3 uid="uid://bq0iveyrucwvg"]
+
+[ext_resource type="PackedScene" uid="uid://bou17p2r56o2u" path="res://scenes/lock.tscn" id="2_cpr0p"]
+[ext_resource type="PackedScene" uid="uid://c5eks1qucs64a" path="res://scenes/rune.tscn" id="3_78awf"]
+
+[sub_resource type="GDScript" id="GDScript_qbsmt"]
+script/source = "@tool
+extends Node2D
+class_name Board
+
+@export var width: int = 512 : set = set_width;
+@export var height: int = 1024 : set = set_height;
+@export var min_height: int = 128;
+@export var min_width: int = 128;
+
+@export var bg_color: Color = Color(\"#1e1e1e\") : set = set_bg_color;
+@export var border_px: float = 2.0 : set = set_border_px;
+@export var border_color: Color = Color.WHITE : set = set_border_color;
+
+@export var draw_grid: bool = false : set = set_draw_grid;
+@export var grid_cell: Vector2i = Vector2i(64, 64) : set = set_grid_cell;
+@export var grid_color: Color = Color(1, 1, 1, 0.06) : set = set_grid_color;
+
+func set_width(v:int) -> void:
+	width = max(min_width, v);
+	queue_redraw();
+
+func set_height(v:int) -> void:
+	height = max(min_height, v);
+	queue_redraw();
+
+func set_bg_color(c:Color) -> void:
+	bg_color = c;
+	queue_redraw();
+
+func set_border_px(v:float) -> void:
+	border_px = max(1.0, v);
+	queue_redraw();
+
+func set_border_color(c:Color) -> void:
+	border_color = c;
+	queue_redraw();
+
+func set_draw_grid(v:bool) -> void:
+	draw_grid = v;
+	queue_redraw();
+
+func set_grid_cell(v:Vector2i) -> void:
+	grid_cell = Vector2i(max(8, v.x), max(8, v.y));
+	queue_redraw();
+	
+func set_grid_color(c:Color) -> void:
+	grid_color = c;
+	queue_redraw();
+
+func _ready() -> void:
+	queue_redraw();
+
+func _draw() -> void:
+	var rect := Rect2(Vector2.ZERO, Vector2(width, height));
+
+	draw_rect(rect, bg_color, true);
+
+	if border_px > 0.0:
+		draw_rect(rect, border_color, false, border_px);
+
+	if draw_grid:
+		for x in range(0, width + 1, grid_cell.x):
+			draw_line(Vector2(x, 0), Vector2(x, height), grid_color, 1.0);
+			
+		for y in range(0, height + 1, grid_cell.y):
+			draw_line(Vector2(0, y), Vector2(width, y), grid_color, 1.0);
+"
+
+[node name="Node2D" type="Node2D"]
+
+[node name="BoardNode" type="Node2D" parent="."]
+position = Vector2(16, 16)
+script = SubResource("GDScript_qbsmt")
+draw_grid = true
+
+[node name="Lock" parent="BoardNode" instance=ExtResource("2_cpr0p")]
+position = Vector2(288, 800)
+color = 2
+
+[node name="Rune" parent="BoardNode" instance=ExtResource("3_78awf")]
+position = Vector2(192, 96)
