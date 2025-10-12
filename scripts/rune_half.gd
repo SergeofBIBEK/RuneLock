@@ -73,7 +73,6 @@ func set_particle_color():
 	pm.color_ramp = tex;
 
 func destroy():
-	print('deleting rune half');
 	if ap.has_animation("explode"):
 		ap.play("explode", -1, 2.0);
 		await ap.animation_finished;

@@ -19,8 +19,11 @@ var height: int = 16 * Config.CELL_SIZE;
 @export var grid_cell: Vector2i = Vector2i(Config.CELL_SIZE, Config.CELL_SIZE) : set = set_grid_cell;
 @export var grid_color: Color = Color(1, 1, 1, 0.06) : set = set_grid_color;
 
-var game_over := false;
-var win := false;
+@export var desired_lock_count: int = 1;
+
+@onready var parent = get_parent();
+
+var reset_wait := false;
 var lock_count: int = 0;
 
 const RUNE_SCENE: PackedScene = preload("res://scenes/rune/Rune.tscn");
@@ -29,23 +32,34 @@ const LOCK_SCENE: PackedScene = preload("res://scenes/lock/lock.tscn");
 func _ready():
 	if not Engine.is_editor_hint():
 		Events.active_rune_finished.connect(_on_rune_finished);
-		Events.game_over.connect(_on_game_over);
 		Events.lock_cleared.connect(_on_lock_cleared);
 	
-	_spawn_random_locks(15);
-	_spawn_new_rune();
+	_spawn_random_locks(desired_lock_count);
+	spawn_new_rune();
 	queue_redraw();
+
+func reset():
+	for child in get_children():
+		if child is Rune || child is Lock:
+			child.free();
+	
+	reset_wait = true;
+	_spawn_random_locks(desired_lock_count);
 
 func _on_lock_cleared():
 	lock_count -= 1;
 	if lock_count == 0:
-		win = true;
-		print('game won!');
+		Events.level_completed.emit();
 
 func _on_rune_finished(_rune: Rune) -> void:
+	reset_wait = false;
+	
 	await _cascade();
 	
-	_spawn_new_rune();
+	if reset_wait:
+		reset_wait = false;
+	else:
+		spawn_new_rune();
 
 func _cascade():
 	while true:
@@ -81,9 +95,6 @@ func _cascade():
 
 func _rune_is_moving(rune: Rune):
 	return rune.free_falling;
-
-func _on_game_over():
-	game_over = true;
 	
 func _scan_board():
 	var runesAndLocks: Array = [];
@@ -239,10 +250,7 @@ func _draw() -> void:
 			draw_line(Vector2(0, y), Vector2(width, y), grid_color, 1.0);
 
 @warning_ignore_start("integer_division")
-func _spawn_new_rune():
-	if game_over or win:
-		return;
-	
+func spawn_new_rune():
 	var new_rune := RUNE_SCENE.instantiate() as Rune;
 	
 	var starting_column = columns / 2;

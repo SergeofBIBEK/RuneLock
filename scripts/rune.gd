@@ -60,8 +60,7 @@ func _physics_process(delta: float) -> void:
 			velocity = Vector2.ZERO;
 			
 		if top_hit and (bottom_hit or vertical_hit):
-			print('game over!');
-			Events.game_over.emit();
+			Events.level_failed.emit();
 			return;
 			
 		if !active and not top_hit:

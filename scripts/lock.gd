@@ -54,7 +54,6 @@ func _notification(what):
 			Events.lock_cleared.emit();
 
 func destroy():
-	print('deleting lock');
 	if ap.has_animation("explode"):
 		ap.play("explode", -1, 2.0);
 		await ap.animation_finished;

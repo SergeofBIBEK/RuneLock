@@ -1,0 +1,46 @@
+[gd_scene load_steps=5 format=3 uid="uid://r6fo6rfh5sge"]
+
+[ext_resource type="Script" uid="uid://c20xxa3fgi6hy" path="res://ui/level_failed_overlay.gd" id="1_qcq2u"]
+
+[sub_resource type="Gradient" id="Gradient_8acs3"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0.641934, 0.64193404, 0.64193386, 0.27450982)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ak68f"]
+gradient = SubResource("Gradient_8acs3")
+fill_to = Vector2(1, 1)
+
+[sub_resource type="Theme" id="Theme_8acs3"]
+default_font_size = 160
+
+[node name="LevelFailedOverlay" type="CanvasLayer"]
+process_mode = 3
+visible = false
+script = ExtResource("1_qcq2u")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(960, 540)
+scale = Vector2(30, 16.875)
+texture = SubResource("GradientTexture2D_ak68f")
+
+[node name="Panel" type="CenterContainer" parent="."]
+offset_right = 1920.0
+offset_bottom = 1080.0
+theme = SubResource("Theme_8acs3")
+
+[node name="VBox" type="VBoxContainer" parent="Panel"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Panel/VBox"]
+layout_mode = 2
+text = "Level Failed!"
+
+[node name="Buttons" type="HBoxContainer" parent="Panel/VBox"]
+layout_mode = 2
+alignment = 1
+
+[node name="Retry" type="Button" parent="Panel/VBox/Buttons"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Retry"
+autowrap_trim_flags = 192
