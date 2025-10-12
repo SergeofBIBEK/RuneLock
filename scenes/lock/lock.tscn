@@ -1,0 +1,32 @@
+[gd_scene load_steps=7 format=3 uid="uid://bou17p2r56o2u"]
+
+[ext_resource type="Script" uid="uid://c5cq4pbe4157g" path="res://scripts/lock.gd" id="1_nqmup"]
+[ext_resource type="Shader" uid="uid://clkkg67lgq5cv" path="res://scenes/lock/lock.gdshader" id="2_goq0o"]
+[ext_resource type="Texture2D" uid="uid://clqwukrvcmmj2" path="res://art/lock/Lock_Base_emission_mask.png" id="3_bxmnu"]
+[ext_resource type="Texture2D" uid="uid://yyei6p07c3jt" path="res://art/lock/Lock_Base.png" id="4_4dt24"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nqmup"]
+size = Vector2(64, 64)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_goq0o"]
+resource_local_to_scene = true
+shader = ExtResource("2_goq0o")
+shader_parameter/emission_mask = ExtResource("3_bxmnu")
+shader_parameter/emission_color = Color(1, 0, 0, 1)
+shader_parameter/emission_strength = 25.0
+shader_parameter/base_darken = 0.5
+shader_parameter/glow_alpha = 1.0
+
+[node name="Lock" type="StaticBody2D"]
+script = ExtResource("1_nqmup")
+color = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_nqmup")
+debug_color = Color(0, 0.6, 0.69803923, 0.19607843)
+
+[node name="Art" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_goq0o")
+position = Vector2(0, 1)
+scale = Vector2(0.068, 0.068)
+texture = ExtResource("4_4dt24")

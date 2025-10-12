@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://c5eks1qucs64a"]
+
+[ext_resource type="Script" uid="uid://ceef4ollvf7om" path="res://scripts/rune.gd" id="1_024sg"]
+[ext_resource type="PackedScene" uid="uid://dxa32jjdpq3ux" path="res://scenes/rune/half_rune.tscn" id="2_c1p0v"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bsd8w"]
+size = Vector2(127, 63)
+
+[node name="Rune" type="CharacterBody2D"]
+script = ExtResource("1_024sg")
+
+[node name="RuneLeft" parent="." instance=ExtResource("2_c1p0v")]
+position = Vector2(-32, 0)
+
+[node name="RuneRight" parent="." instance=ExtResource("2_c1p0v")]
+position = Vector2(32, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_bsd8w")

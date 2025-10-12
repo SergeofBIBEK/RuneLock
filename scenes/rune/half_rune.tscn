@@ -1,0 +1,62 @@
+[gd_scene load_steps=13 format=3 uid="uid://dxa32jjdpq3ux"]
+
+[ext_resource type="Script" uid="uid://daaeumnbiscfa" path="res://scripts/rune_half.gd" id="1_8q5wj"]
+[ext_resource type="Shader" uid="uid://bfcypmd4tl8ay" path="res://scenes/rune/half_rune.gdshader" id="2_3xdls"]
+[ext_resource type="Texture2D" uid="uid://cwo8hp1lvxf0t" path="res://art/rune/Rune_Base.png" id="3_6dnil"]
+[ext_resource type="Texture2D" uid="uid://gxp3xjfasoxe" path="res://art/rune/Rune_Base_emission_mask.png" id="4_mldm8"]
+[ext_resource type="Texture2D" uid="uid://chs2bbn7p322j" path="res://art/rune/Rune_Base_floaters.png" id="5_f4s58"]
+[ext_resource type="Script" uid="uid://dcnetqpn5n174" path="res://scenes/rune/art.gd" id="5_mldm8"]
+[ext_resource type="Texture2D" uid="uid://by3q8nkenphwd" path="res://art/rune/sparkle.png" id="6_f4s58"]
+[ext_resource type="Texture2D" uid="uid://87n6wgfnsli6" path="res://art/rune/Rune_Base_floaters_emission_mask.png" id="6_s4ubj"]
+[ext_resource type="Script" uid="uid://cmdbmhd0trudw" path="res://scenes/rune/floaters.gd" id="7_6dnil"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3xdls"]
+resource_local_to_scene = true
+shader = ExtResource("2_3xdls")
+shader_parameter/emission_mask = ExtResource("4_mldm8")
+shader_parameter/emission_color = Color(0, 0, 0, 1)
+shader_parameter/emission_strength = 0.8
+shader_parameter/base_darken = 0.5
+shader_parameter/glow_alpha = 1.0
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_s4ubj"]
+particle_flag_disable_z = true
+gravity = Vector3(0, 1, 0)
+linear_accel_min = -100.0
+linear_accel_max = 99.99999
+radial_accel_min = -100.0
+radial_accel_max = 99.99999
+tangential_accel_min = -100.0
+tangential_accel_max = 99.99999
+scale_min = 0.099999994
+scale_max = 0.5
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mldm8"]
+resource_local_to_scene = true
+shader = ExtResource("2_3xdls")
+shader_parameter/emission_mask = ExtResource("6_s4ubj")
+shader_parameter/emission_color = Color(0, 0, 0, 1)
+shader_parameter/emission_strength = 0.8
+shader_parameter/base_darken = 0.5
+shader_parameter/glow_alpha = 1.0
+
+[node name="HalfRune" type="Node2D"]
+script = ExtResource("1_8q5wj")
+side = -1
+
+[node name="Art" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_3xdls")
+scale = Vector2(0.068, 0.068)
+texture = ExtResource("3_6dnil")
+script = ExtResource("5_mldm8")
+
+[node name="Sparkles" type="GPUParticles2D" parent="Art"]
+amount = 75
+texture = ExtResource("6_f4s58")
+process_material = SubResource("ParticleProcessMaterial_s4ubj")
+
+[node name="Floaters" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_mldm8")
+scale = Vector2(0.068, 0.068)
+texture = ExtResource("5_f4s58")
+script = ExtResource("7_6dnil")

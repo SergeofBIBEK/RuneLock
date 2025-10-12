@@ -23,8 +23,8 @@ var game_over := false;
 var win := false;
 var lock_count: int = 0;
 
-const RUNE_SCENE: PackedScene = preload("res://scenes/Rune.tscn");
-const LOCK_SCENE: PackedScene = preload("res://scenes/Lock.tscn");
+const RUNE_SCENE: PackedScene = preload("res://scenes/rune/Rune.tscn");
+const LOCK_SCENE: PackedScene = preload("res://scenes/lock/lock.tscn");
 
 func _ready():
 	if not Engine.is_editor_hint():

@@ -1,9 +1,16 @@
-[gd_scene load_steps=2 format=3 uid="uid://bq0iveyrucwvg"]
+[gd_scene load_steps=3 format=3 uid="uid://bq0iveyrucwvg"]
 
-[ext_resource type="Script" uid="uid://bbaej1bdri61y" path="res://scripts/board.gd" id="1_cpr0p"]
+[ext_resource type="PackedScene" uid="uid://crx8l51wwhh5h" path="res://scenes/board/board.tscn" id="1_ibkli"]
+
+[sub_resource type="Environment" id="Environment_ibkli"]
+glow_enabled = true
+glow_intensity = 1.0
+glow_bloom = 0.5
 
 [node name="Node2D" type="Node2D"]
 
-[node name="Board" type="Node2D" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_ibkli")
+
+[node name="Board" parent="." instance=ExtResource("1_ibkli")]
 position = Vector2(500, 24)
-script = ExtResource("1_cpr0p")

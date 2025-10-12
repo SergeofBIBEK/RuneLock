@@ -11,6 +11,7 @@ var width: float = Config.CELL_SIZE;
 func _ready() -> void:
 	var colorOptionCount = Config.ColorId.keys().size();
 	color = (randi() % colorOptionCount) as Config.ColorId;
+	set_glow_color();
 	
 	var shape := RectangleShape2D.new();
 	shape.size = Vector2(width, height);
@@ -21,14 +22,29 @@ func _ready() -> void:
 		cs.shape = shape;
 	queue_redraw();
 
-func _draw():
-	var rect := Rect2(
-		Vector2(-width * 0.5, -height * 0.5) + Vector2(0.5, 0.5),
-		Vector2(width - 1, height - 1)
-	);
+func set_glow_color():
+	var sprite := $Art as Sprite2D;
+	if sprite == null:
+		push_error("Node 'Art' not found.");
+		return;
+
+	var mat := sprite.material
+	if mat == null:
+		push_error("'Art' has no material. Did you add the ShaderMaterial?");
+		return;
+
+	if not (mat is ShaderMaterial):
+		push_error("'Art' material is not a ShaderMaterial.");
+		return;
+
+	if not mat.resource_local_to_scene:
+		mat = mat.duplicate();
+		mat.resource_local_to_scene = true;
+		sprite.material = mat;
+
+	var col: Color = Config.COLOR_MAP.get(color, Color.WHITE);
 	
-	var col: Color = Config.COLOR_MAP.get(color, Color(0.6, 0.6, 0.6));
-	draw_rect(rect, col.darkened(0.4), true);
+	mat.set_shader_parameter("emission_color", Vector3(col.r, col.g, col.b));
 
 func _notification(what):
 	if what == NOTIFICATION_EXIT_TREE:
@@ -37,4 +53,5 @@ func _notification(what):
 
 func set_color(v: Config.ColorId):
 	color = v;
+	set_glow_color();
 	queue_redraw();
