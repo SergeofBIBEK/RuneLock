@@ -29,7 +29,7 @@ func _physics_process(delta: float) -> void:
 		var current_fall_speed = fall_speed;
 		
 		if Input.is_action_pressed("accelerate"):
-			current_fall_speed = 2000;
+			current_fall_speed = 1500;
 		
 		var v := Vector2.ZERO;
 		v.y = current_fall_speed;
@@ -67,7 +67,7 @@ func _physics_process(delta: float) -> void:
 		if !active and not top_hit:
 			Events.active_rune_finished.emit(self);
 	else:
-		var hit = move_and_collide(Vector2(0.0, 2000) * delta);
+		var hit = move_and_collide(Vector2(0.0, 500) * delta);
 		if hit:
 			free_falling = false;
 		elif _check_bottom_hit():

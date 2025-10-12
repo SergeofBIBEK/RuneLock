@@ -8,6 +8,8 @@ var width: float = Config.CELL_SIZE;
 @export var color: Config.ColorId = Config.ColorId.RED:
 	set = set_color;
 
+@onready var ap := $Art/AnimationPlayer;
+
 func _ready() -> void:
 	var colorOptionCount = Config.ColorId.keys().size();
 	color = (randi() % colorOptionCount) as Config.ColorId;
@@ -50,6 +52,14 @@ func _notification(what):
 	if what == NOTIFICATION_EXIT_TREE:
 		if not Engine.is_editor_hint():
 			Events.lock_cleared.emit();
+
+func destroy():
+	print('deleting lock');
+	if ap.has_animation("explode"):
+		ap.play("explode", -1, 2.0);
+		await ap.animation_finished;
+		
+	queue_free();
 
 func set_color(v: Config.ColorId):
 	color = v;

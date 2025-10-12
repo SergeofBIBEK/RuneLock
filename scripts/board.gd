@@ -38,7 +38,6 @@ func _ready():
 
 func _on_lock_cleared():
 	lock_count -= 1;
-	print('lock cleared');
 	if lock_count == 0:
 		win = true;
 		print('game won!');
@@ -57,7 +56,7 @@ func _cascade():
 
 		for run in runs:
 			for node in run.nodes:
-				node.queue_free();
+				await node.destroy();
 		
 		var quiet := 0;
 		

@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bou17p2r56o2u"]
+[gd_scene load_steps=10 format=3 uid="uid://bou17p2r56o2u"]
 
 [ext_resource type="Script" uid="uid://c5cq4pbe4157g" path="res://scripts/lock.gd" id="1_nqmup"]
 [ext_resource type="Shader" uid="uid://clkkg67lgq5cv" path="res://scenes/lock/lock.gdshader" id="2_goq0o"]
@@ -12,16 +12,102 @@ size = Vector2(64, 64)
 resource_local_to_scene = true
 shader = ExtResource("2_goq0o")
 shader_parameter/emission_mask = ExtResource("3_bxmnu")
-shader_parameter/emission_color = Color(1, 0, 0, 1)
+shader_parameter/emission_color = Color(0, 0, 0, 1)
 shader_parameter/emission_strength = 25.0
 shader_parameter/base_darken = 0.5
 shader_parameter/glow_alpha = 1.0
+
+[sub_resource type="Animation" id="Animation_nqmup"]
+resource_name = "explode"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0.068, 0.068), Vector2(0.075, 0.075), Vector2(0.1, 0.1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.35, 0.4, 0.45, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 1), Vector2(1, 1), Vector2(-1, 1), Vector2(2, 1), Vector2(-3, 1), Vector2(3, 1), Vector2(-4, 1), Vector2(0, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:material:shader_parameter/emission_color")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(5, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 1), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_goq0o"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.068, 0.068)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:material:shader_parameter/emission_color")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_bxmnu"]
+_data = {
+&"RESET": SubResource("Animation_goq0o"),
+&"explode": SubResource("Animation_nqmup")
+}
 
 [node name="Lock" type="StaticBody2D"]
 script = ExtResource("1_nqmup")
 color = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 shape = SubResource("RectangleShape2D_nqmup")
 debug_color = Color(0, 0.6, 0.69803923, 0.19607843)
 
@@ -30,3 +116,8 @@ material = SubResource("ShaderMaterial_goq0o")
 position = Vector2(0, 1)
 scale = Vector2(0.068, 0.068)
 texture = ExtResource("4_4dt24")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Art"]
+libraries = {
+&"": SubResource("AnimationLibrary_bxmnu")
+}

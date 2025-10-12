@@ -9,6 +9,7 @@ var color: Config.ColorId = Config.ColorId.RED:
 	
 @export var side: int = 1;
 @onready var particles := $Art/Sparkles as GPUParticles2D
+@onready var ap := $Art/AnimationPlayer;
 
 func _ready() -> void:
 	var colorOptionCount = Config.ColorId.keys().size();
@@ -70,6 +71,13 @@ func set_particle_color():
 	var tex := GradientTexture1D.new();
 	tex.gradient = grad;
 	pm.color_ramp = tex;
+
+func destroy():
+	print('deleting rune half');
+	if ap.has_animation("explode"):
+		ap.play("explode", -1, 2.0);
+		await ap.animation_finished;
+	queue_free();
 
 func set_color(v: Config.ColorId):
 	color = v;
